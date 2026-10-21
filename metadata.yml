@@ -1,0 +1,7 @@
+group: Z3  # replace with your own group (A1, A2, B1, B2, C1, SC1)
+names:  # Replace with your own names (lastname first)
+  - Thomas Dorian
+  - Nhi Nguyen
+emails:  # Replace with your own INSA email address
+  - dthoma@insa-toulouse.fr
+  - nnguye@insa-toulouse.fr
