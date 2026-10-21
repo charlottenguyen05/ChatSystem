@@ -10,18 +10,10 @@ public class ContactDiscovery {
     public ContactDiscovery() {
     }
 
-    private static class ListenerThread extends Thread {
 
-        @Override
-        public void run() {
-            System.out.println("Greetings !!!");
-
-            // TODO: Listen for UDP broadcasts
-        }
-    }
 
     public void start() {
-        Thread listen = new ListenerThread();
-        listen.start();
+        Listen listen = new Listen(); // Creates a Listen object which creates and runs a thread
+        Send send = new Send(); // Creates a Send object and sends an UDP Broadcast every second
     }
 }

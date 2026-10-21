@@ -4,6 +4,6 @@ public class App {
 
         ContactDiscovery contacts = new ContactDiscovery();
         contacts.start();
-
+        
     }
 }

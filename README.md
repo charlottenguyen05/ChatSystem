@@ -24,3 +24,8 @@ As long as you make sure to keep the `metadata.yml` file at the root of this rep
       report.pdf
 
 In particular, you will soon have to replace this README with something that describes your own project.
+
+
+To compile : 
+mvn clean compile
+java -cp target/classes App
