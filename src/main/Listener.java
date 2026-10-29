@@ -2,7 +2,7 @@ import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 
-public class Listen {
+public class Listener {
 
     private static class ListenerThread extends Thread {
 
@@ -31,7 +31,7 @@ public class Listen {
         }
     }
 
-    public Listen() {
+    public Listener() {
         Thread listenerThread = new ListenerThread();
         listenerThread.start();
     }
