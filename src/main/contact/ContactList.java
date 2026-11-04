@@ -3,9 +3,9 @@
 package contact;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
+import java.util.HashMap;
 import java.util.UUID;
 
 public class ContactList {
@@ -16,15 +16,14 @@ public class ContactList {
         private static final ContactList INSTANCE = new ContactList();
     }
 
-    public ContactList() {
+    private ContactList() {
         this.contactList = new HashMap<>();
     }
 
-    // returns Hashmap contactList
     public static ContactList getInstance() {
         return Holder.INSTANCE;
     }
-
+    
     public int getListSize() {
         if (!contactList.isEmpty()) {
             return contactList.size();
@@ -44,7 +43,24 @@ public class ContactList {
                 contactList.get(c.getUUID()).setNickname(c.getNickname());
                 contactList.get(c.getUUID()).setIp(c.getIp());
             }
+
+            // Display all the elements of the list (be careful when too many users)
+            List<UUID> keys = getListUUID();
+            for(int i=0; i<=contactList.size()-1;i++) {
+                System.out.println(i + " " + contactList.get((keys.get(i))).getNickname());
+            }
         }
+    }
+
+    public void addOrUpdateContactTestVersion(Contact c) {
+                    // Case 1: UUID not yet in the map then add it
+            if (!contactList.containsKey(c.getUUID())) {
+                contactList.put(c.getUUID(), c);
+            }
+            // Case 2: UUID already in the map then update its nickname and IP
+            else {
+                contactList.get(c.getUUID()).setNickname(c.getNickname());
+            }
     }
 
     // Nickname validation

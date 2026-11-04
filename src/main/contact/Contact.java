@@ -21,6 +21,16 @@ public class Contact {
         }
     }
 
+    public Contact (String nickname, UUID uuid) {
+        this.uuid = uuid; 
+        try {
+            this.nickname = nickname;
+            this.ip = InetAddress.getLocalHost();
+        } catch (UnknownHostException e) {
+            System.out.println(e);
+        }
+    }
+
     // Constructor for received contact
     public Contact(UUID uuid, String nickname, InetAddress ip) {
         this.uuid = uuid;

@@ -1,10 +1,14 @@
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
+import java.util.UUID;
+
+import contact.Contact;
+import contact.ContactList;
 
 public class Listener {
-
     private static class ListenerThread extends Thread {
+        ContactList contactList = ContactList.getInstance(); 
 
         @Override
         public void run() {
@@ -21,7 +25,10 @@ public class Listener {
                     // From doc : String(byte[] bytes, int offset, int length)
                     String message = new String(packet.getData(), 0, packet.getLength());
 
-                    System.out.println("Received from " + packet.getAddress() + " -> " + message);
+                    //System.out.println("Received from " + packet.getAddress() + " -> " + message);
+                    AddUserToContactList(message);
+                    
+
                 } 
             } catch (Exception e) {
                 System.out.println(e);
@@ -29,7 +36,18 @@ public class Listener {
 
 
         }
+
+        
+        // add new user to contact list
+        public void AddUserToContactList(String message) {
+            String username = message.split(":")[2];
+            String keyString = message.split(":")[1];
+            UUID key = UUID.fromString(keyString);
+            System.out.println("Username received : " + username); // delete after
+            contactList.addOrUpdateContact(new Contact(username, key)); // ContactList method to add or update inside a list
+        }
     }
+
 
     public Listener() {
         Thread listenerThread = new ListenerThread();

@@ -66,11 +66,11 @@ public class Sender {
                 InetAddress address = InetAddress.getByName("10.1.255.255");
                 DatagramPacket packet = new DatagramPacket(buffer, buffer.length, address, PORT);
                 socket.send(packet);
-                System.out.println("Sen\r\n" + //
+                /* System.out.println("Sen\r\n" + //
                                         "\r\n" + //
                                         "    // Call when app exists\r\n" + //
                                         "    public void shutdown() {\r\n" + //
-                                        "     der sent: " + byeMessage);
+                                        "     der sent: " + byeMessage); */
             } catch (IOException e) {
                 System.err.println("Sender fail to send BYE: " + e.getMessage());
             }
