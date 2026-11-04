@@ -44,15 +44,30 @@ public class ContactList {
                 contactList.get(c.getUUID()).setIp(c.getIp());
             }
 
-            // Display all the elements of the list (be careful when too many users)
-            List<UUID> keys = getListUUID();
-            for(int i=0; i<=contactList.size()-1;i++) {
-                System.out.println(i + " " + contactList.get((keys.get(i))).getNickname());
-            }
+            // Display all the elements of the list
+            displayContactList();
         }
     }
 
-    public void addOrUpdateContactTestVersion(Contact c) {
+     // Remove user (when the user goes offline)
+    public void removeUser(UUID uuid) {
+        synchronized (contactList) {
+            contactList.remove(uuid);
+        }
+
+        // Display contact list
+        displayContactList();
+    }
+
+    // Display all users on the list (be careful when too many users)
+    public void displayContactList() {
+        List<UUID> keys = getListUUID();
+        for(int i=0; i<=contactList.size()-1;i++) {
+            System.out.println(i + " " + contactList.get((keys.get(i))).getNickname());
+        }
+    }
+
+    /*public void addOrUpdateContactTestVersion(Contact c) { // delete when users comes from network
                     // Case 1: UUID not yet in the map then add it
             if (!contactList.containsKey(c.getUUID())) {
                 contactList.put(c.getUUID(), c);
@@ -61,7 +76,7 @@ public class ContactList {
             else {
                 contactList.get(c.getUUID()).setNickname(c.getNickname());
             }
-    }
+    }*/
 
     // Nickname validation
     public boolean isNicknameValid(String nickname) {
@@ -77,13 +92,6 @@ public class ContactList {
 
     public Contact getElement(UUID uuid) {
         return contactList.get(uuid);
-    }
-
-    // Remove user (when the user goes offline)
-    public void removeUser(UUID uuid) {
-        synchronized (contactList) {
-            contactList.remove(uuid);
-        }
     }
 
     // returns a list of Contact

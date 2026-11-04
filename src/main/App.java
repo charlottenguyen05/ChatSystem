@@ -34,10 +34,16 @@ public class App {
             for (int i=0; i<=initialUsers.size()-1;i++) {
                 contacts.start(initialUsers.get(i));
                 //System.out.println("After loop");
-                Thread.sleep(2000);
+                Thread.sleep(1000);
                 //System.out.println("After sleep");
             }
-            contacts.stop();
+            System.out.println("CALLING STOP");
+            Thread.sleep(5000); // wait 5s
+            
+            for (int i=0; i<=initialUsers.size()-1;i++) {
+                contacts.stop(initialUsers.get(i));
+            }
+            
             //System.out.println("After stop");
             
 

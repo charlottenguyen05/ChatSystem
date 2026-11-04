@@ -1,7 +1,7 @@
 Sender.class
 contact/ContactList$Holder.class
-Listener$ListenerThread.class
 contact/ContactList.class
+Listener$ListenerThread.class
 ContactDiscovery.class
 Sender$SendThread.class
 Listener.class

@@ -35,7 +35,7 @@ public class Sender {
         public void run() {
             try (DatagramSocket socket = new DatagramSocket()) {
                 socket.setBroadcast(true);
-                InetAddress address = InetAddress.getByName("255.255.255.255");
+                InetAddress address = InetAddress.getByName("10.1.255.255");
                 while (running) {
                     String message = "ONLINE BROADCAST:" + myself.getUUID() + ":" + myself.getNickname();
                     byte[] buffer = message.getBytes();
@@ -61,7 +61,7 @@ public class Sender {
         private void sendBye() {
             try (DatagramSocket socket = new DatagramSocket()) {
                 socket.setBroadcast(true);
-                String byeMessage = "BYE:" + myself.getUUID();
+                String byeMessage = "BYE:" + myself.getUUID() + ":" + myself.getNickname();
                 byte[] buffer = byeMessage.getBytes(StandardCharsets.UTF_8);
                 InetAddress address = InetAddress.getByName("10.1.255.255");
                 DatagramPacket packet = new DatagramPacket(buffer, buffer.length, address, PORT);

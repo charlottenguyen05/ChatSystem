@@ -29,3 +29,7 @@ In particular, you will soon have to replace this README with something that des
 To compile : 
 mvn clean compile
 java -cp target/classes App
+
+Commit144553f : Users are local. After this commit, users will be found with the network
+
+TODO : Remake the stop method in ContactDiscovery to shutdown the right contact 
