@@ -13,15 +13,18 @@ public class Listener {
     private static class ListenerThread extends Thread {
         ContactList contactList = ContactList.getInstance(); 
         private volatile boolean running = true;
+        DatagramSocket socket;
+
         @Override
         public void run() {
             int port = 12345;
             byte[] buffer = new byte[1024];
 
-            try (DatagramSocket socket = new DatagramSocket(port)) {
+            try {
+                socket = new DatagramSocket(port);
                 System.out.println("Listening on port : " + port);
 
-                while(true){ 
+                while(running){ 
                     DatagramPacket packet = new DatagramPacket(buffer, buffer.length);
                     socket.receive(packet);
 
@@ -49,6 +52,9 @@ public class Listener {
             interrupt(); // wake up from Thread.sleep()
             try {
                 join(2000);
+                if (socket != null && !socket.isClosed()) {
+                    socket.close();
+                }
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
             }

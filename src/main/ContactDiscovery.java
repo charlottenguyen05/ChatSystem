@@ -3,6 +3,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import contact.Contact;
+import contact.ContactList;
 
 public class ContactDiscovery {
     HashMap<Contact, List<Object>> threadCorrespondingToContact = new HashMap<>();  
@@ -38,5 +39,6 @@ public class ContactDiscovery {
             System.out.println("Sender thread successfully stopped");
         }
         
+        ContactList.getInstance().removeUser(c.getUUID());
     }
 }

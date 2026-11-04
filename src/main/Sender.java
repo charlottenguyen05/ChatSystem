@@ -15,25 +15,16 @@ public class Sender {
     private static class SendThread extends Thread {
         private final Contact myself;
         private volatile boolean running = true;
-
+        DatagramSocket socket;
         public SendThread(Contact myself) {
             this.myself = myself;
         }
 
-        // Stops the heartbeat and waits 2s for the BYE message to be sent.
-        public void shutdown() {
-            running = false;
-            interrupt(); // wake up from Thread.sleep()
-            try {
-                join(2000);
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
-            }
-        }
-
         @Override
         public void run() {
-            try (DatagramSocket socket = new DatagramSocket()) {
+
+            try {
+                socket = new DatagramSocket();
                 socket.setBroadcast(true);
                 InetAddress address = InetAddress.getByName("10.1.255.255");
                 while (running) {
@@ -54,12 +45,15 @@ public class Sender {
                 e.printStackTrace();
             } finally {
                 sendBye();
+                if (socket != null && !socket.isClosed()) {
+                    socket.close();
+                }
             }
         }
 
         // Broadcasts BYE packet to notify peers this user is leaving.
         private void sendBye() {
-            try (DatagramSocket socket = new DatagramSocket()) {
+            try {
                 socket.setBroadcast(true);
                 String byeMessage = "BYE:" + myself.getUUID() + ":" + myself.getNickname();
                 byte[] buffer = byeMessage.getBytes(StandardCharsets.UTF_8);
@@ -75,6 +69,19 @@ public class Sender {
                 System.err.println("Sender fail to send BYE: " + e.getMessage());
             }
         }
+
+        public void shutdown() {
+            running = false;
+            interrupt(); // wake up from Thread.sleep()
+            try {
+                join(2000);
+                if (socket != null && !socket.isClosed()) {
+                    socket.close();
+                }
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+        }
     }
 
     public Sender(Contact myself) {
@@ -82,9 +89,9 @@ public class Sender {
         this.sendThread = new SendThread(myself);
         sendThread.start();
     }
-    
-    // Call when app exists
+
     public void shutdown() {
         sendThread.shutdown();
     }
+
 }

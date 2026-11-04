@@ -61,9 +61,14 @@ public class ContactList {
 
     // Display all users on the list (be careful when too many users)
     public void displayContactList() {
-        List<UUID> keys = getListUUID();
-        for(int i=0; i<=contactList.size()-1;i++) {
-            System.out.println(i + " " + contactList.get((keys.get(i))).getNickname());
+        synchronized (contactList) {
+            int i = 0;
+            for (Contact c : contactList.values()) {
+                if (c != null) {
+                    System.out.println(i + " " + c.getNickname());
+                    i++;
+                }
+            }
         }
     }
 
