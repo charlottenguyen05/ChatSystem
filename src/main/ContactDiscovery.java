@@ -7,6 +7,7 @@ public class ContactDiscovery {
     public void start(Contact myself) {
         this.listener = new Listener();
         this.sender = new Sender(myself);
+        System.out.println("Starting : " + myself.getNickname());
     }
 
     public void stop() {

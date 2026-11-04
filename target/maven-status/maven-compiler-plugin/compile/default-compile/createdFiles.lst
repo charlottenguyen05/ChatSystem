@@ -1,6 +1,9 @@
-App.class
-Listen.class
-Send$SendThread.class
-Listen$ListenerThread.class
+Sender.class
+contact/ContactList$Holder.class
+Listener$ListenerThread.class
+contact/ContactList.class
 ContactDiscovery.class
-Send.class
+Sender$SendThread.class
+Listener.class
+App.class
+contact/Contact.class

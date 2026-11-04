@@ -63,10 +63,14 @@ public class Sender {
                 socket.setBroadcast(true);
                 String byeMessage = "BYE:" + myself.getUUID();
                 byte[] buffer = byeMessage.getBytes(StandardCharsets.UTF_8);
-                InetAddress address = InetAddress.getByName("255.255.255.255");
+                InetAddress address = InetAddress.getByName("10.1.255.255");
                 DatagramPacket packet = new DatagramPacket(buffer, buffer.length, address, PORT);
                 socket.send(packet);
-                System.out.println("Sender sent: " + byeMessage);
+                System.out.println("Sen\r\n" + //
+                                        "\r\n" + //
+                                        "    // Call when app exists\r\n" + //
+                                        "    public void shutdown() {\r\n" + //
+                                        "     der sent: " + byeMessage);
             } catch (IOException e) {
                 System.err.println("Sender fail to send BYE: " + e.getMessage());
             }
@@ -78,7 +82,7 @@ public class Sender {
         this.sendThread = new SendThread(myself);
         sendThread.start();
     }
-
+    
     // Call when app exists
     public void shutdown() {
         sendThread.shutdown();

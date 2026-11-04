@@ -3,6 +3,7 @@ package contact;
 
 import java.util.UUID;
 import java.net.InetAddress;
+import java.net.UnknownHostException;
 
 public class Contact {
     private final UUID uuid; // immutable
@@ -11,9 +12,13 @@ public class Contact {
 
     // Constructor for myself
     public Contact(String nickname) throws java.net.UnknownHostException {
-        this.uuid = UUID.randomUUID();
-        this.nickname = nickname;
-        this.ip = InetAddress.getLocalHost();
+        this.uuid = UUID.randomUUID(); // before the try because it may not be initialized
+        try {
+            this.nickname = nickname;
+            this.ip = InetAddress.getLocalHost();
+        } catch (UnknownHostException e) {
+            System.out.println(e);
+        }
     }
 
     // Constructor for received contact

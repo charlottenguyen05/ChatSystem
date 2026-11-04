@@ -3,8 +3,9 @@
 package contact;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 public class ContactList {
@@ -15,12 +16,20 @@ public class ContactList {
         private static final ContactList INSTANCE = new ContactList();
     }
 
-    private ContactList() {
+    public ContactList() {
         this.contactList = new HashMap<>();
     }
 
+    // returns Hashmap contactList
     public static ContactList getInstance() {
         return Holder.INSTANCE;
+    }
+
+    public int getListSize() {
+        if (!contactList.isEmpty()) {
+            return contactList.size();
+        }
+        return 0;
     }
 
     // Add / Update a discovered contact
@@ -50,6 +59,10 @@ public class ContactList {
         }
     }
 
+    public Contact getElement(UUID uuid) {
+        return contactList.get(uuid);
+    }
+
     // Remove user (when the user goes offline)
     public void removeUser(UUID uuid) {
         synchronized (contactList) {
@@ -57,9 +70,21 @@ public class ContactList {
         }
     }
 
+    // returns a list of Contact
     public List<Contact> getContactList() {
         synchronized (contactList) {
             return new ArrayList<>(contactList.values());
+        }
+    }
+
+    public List<UUID> getListUUID() {
+        synchronized (contactList) {
+            List<UUID> list_uuid = new ArrayList<>(); // list of uuids that will be returned
+            Set<UUID> uuids = contactList.keySet(); // set of uuids that will be transformed into a list
+            for (UUID uuid : uuids) {
+                list_uuid.add(uuid);
+            }
+            return list_uuid;
         }
     }
 }
