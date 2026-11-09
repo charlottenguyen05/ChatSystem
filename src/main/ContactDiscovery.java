@@ -35,7 +35,7 @@ public class ContactDiscovery {
 
         Object senderThread = threads.get(1);
         if (senderThread instanceof Sender s) {
-            // s.shutdown(); // Pensez à l'implémenter dans Sender si ce n'est pas fait
+            s.shutdown(); // Pensez à l'implémenter dans Sender si ce n'est pas fait
             System.out.println("Sender thread successfully stopped");
         }
         

@@ -36,7 +36,7 @@ public class Sender {
                             address,
                             PORT);
                     socket.send(packet);
-                    //System.out.println("Broadcasting: " + message);
+                    System.out.println("Broadcasting: " + message);
                     Thread.sleep(1000);
                 }
             } catch (InterruptedException e) {
@@ -60,11 +60,7 @@ public class Sender {
                 InetAddress address = InetAddress.getByName("10.1.255.255");
                 DatagramPacket packet = new DatagramPacket(buffer, buffer.length, address, PORT);
                 socket.send(packet);
-                /* System.out.println("Sen\r\n" + //
-                                        "\r\n" + //
-                                        "    // Call when app exists\r\n" + //
-                                        "    public void shutdown() {\r\n" + //
-                                        "     der sent: " + byeMessage); */
+                System.out.println("Send Bye : " + byeMessage); 
             } catch (IOException e) {
                 System.err.println("Sender fail to send BYE: " + e.getMessage());
             }
