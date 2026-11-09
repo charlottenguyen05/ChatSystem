@@ -1,6 +1,7 @@
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
+import java.net.InetAddress;
 import java.util.UUID;
 
 import contact.Contact;
@@ -14,29 +15,69 @@ public class Listener {
         ContactList contactList = ContactList.getInstance(); 
         private volatile boolean running = true;
         DatagramSocket socket;
+        private final Contact myself;
+        public ListenerThread(Contact myself) {
+            this.myself = myself;
+        }
 
         @Override
         public void run() {
-            int port = 12345;
+            int receive_port = 12346;
+            int send_port = 12345;
             byte[] buffer = new byte[1024];
+            byte[] OKbuffer = new byte[1024];
 
             try {
-                socket = new DatagramSocket(port);
-                System.out.println("Listening on port : " + port);
+                socket = new DatagramSocket(receive_port);
+                System.out.println("Listening on port : " + receive_port);
+                InetAddress address = InetAddress.getByName("10.1.255.255"); // Don't forget to change to send to the sender
 
-                while(running){ 
+                boolean broadcastReceived = false;
+                while(!broadcastReceived){ 
                     DatagramPacket packet = new DatagramPacket(buffer, buffer.length);
                     socket.receive(packet);
 
+                    // Check if message received is a BROADCAST
                     // From doc : String(byte[] bytes, int offset, int length)
                     String message = new String(packet.getData(), 0, packet.getLength());
+                    
+                    if (contactList.isNicknameValid(message.split(":")[0])) {
+                        // SENDING OK MESSAGE
+                        String OKmessage = "OK:" + myself.getUUID() + myself.getNickname();
+                        OKbuffer = OKmessage.getBytes();
+                        packet = new DatagramPacket(
+                                OKbuffer,
+                                OKbuffer.length,
+                                address,
+                                send_port);
+                        socket.send(packet);
+                        System.out.println("SENDING OK: " + message);
+                        contactList.addOrUpdateContact(new Contact(message.split(":")[2], UUID.fromString(message.split(":")[1])));
+                    } else {
+                        // Notify user that username is not valid
+                        // SENDING USERNAME NOT CORRECT MESSAGE
+                        String OKmessage = "INVALID_NICKNAME:" + myself.getUUID() + myself.getNickname();
+                        OKbuffer = OKmessage.getBytes();
+                        packet = new DatagramPacket(
+                                OKbuffer,
+                                OKbuffer.length,
+                                address,
+                                send_port);
+                        socket.send(packet);
+                        System.out.println("SENDING INVALID NICKNAME: " + message);
+                    }
 
+
+                    Thread.sleep(1000);
                     //System.out.println("Received from " + packet.getAddress() + " -> " + message);
                     if (message.contains("ONLINE BROADCAST")) {
+
                         AddUserToContactList(message);
                     } else if (message.contains("BYE")) {
                         contactList.removeUser(UUID.fromString(message.split(":")[1]));;
                     }
+
+                    
 
                 } 
             } catch (Exception e) {
@@ -69,6 +110,10 @@ public class Listener {
             contactList.addOrUpdateContact(new Contact(username, key)); // ContactList method to add or update inside a list
         }
 
+        public void isBroadcastOK() {
+            //String byeMessage = "BYE:" + myself.getUUID() + ":" + myself.getNickname();
+
+        }
 
     }
 
@@ -76,7 +121,7 @@ public class Listener {
     public Listener(Contact myself) {
         this.myself = myself;
         // Affectation directe au champ de la classe (sans le type 'Thread' devant)
-        this.listenerThread = new ListenerThread();
+        this.listenerThread = new ListenerThread(myself);
         this.listenerThread.start();
     }
 

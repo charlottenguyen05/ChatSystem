@@ -3,6 +3,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
+import java.util.Scanner;
 
 import contact.Contact;
 import contact.ContactList;
@@ -19,8 +20,10 @@ public class App {
             initialUsers.add(new Contact("300"));
             initialUsers.add(new Contact("400"));
             initialUsers.add(new Contact("500")); */
-            
-            Contact myself = new Contact("MYSELF");
+        
+
+            String myUsername = contactList.nicknameInput();
+            Contact myself = new Contact(myUsername);
 
             /*ContactList initialUsers = ContactList.getInstance(); // contains initial users. If you connect in another device on the network you won't be in that list
             initialUsers.addOrUpdateContactTestVersion(new Contact("100"));
@@ -41,12 +44,13 @@ public class App {
             contacts.start(myself);
 
             System.out.println("CALLING STOP");
-            Thread.sleep(5000); // wait 5s
+            Thread.sleep(60000); // wait 5s
             
             contacts.stop(myself);
 
             // Starting to stop all threads
-            /* for (int i=0; i<=initialUsers.size()-1;i++) {
+            /* for (int i=0; i<=initial
+Users.size()-1;i++) {
                 contacts.stop(initialUsers.get(i));
             } */
             
@@ -58,6 +62,5 @@ public class App {
         } catch (Exception e) {
             System.out.println("An error has occured : " + e);
         }
-        
     }
 }
