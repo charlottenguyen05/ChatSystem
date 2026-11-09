@@ -4,6 +4,7 @@ package contact;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 import java.util.Set;
 import java.util.HashMap;
 import java.util.UUID;
@@ -115,5 +116,13 @@ public class ContactList {
             }
             return list_uuid;
         }
+    }
+
+    public String nicknameInput() {
+            Scanner myScanner = new Scanner(System.in);
+            System.out.println("Enter username");
+            String username = myScanner.nextLine();
+            myScanner.close();
+            return username;
     }
 }

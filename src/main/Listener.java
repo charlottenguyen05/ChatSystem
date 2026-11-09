@@ -1,6 +1,7 @@
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
+import java.net.InetAddress;
 import java.util.UUID;
 
 import contact.Contact;
@@ -13,27 +14,48 @@ public class Listener {
     private static class ListenerThread extends Thread {
         ContactList contactList = ContactList.getInstance(); 
         private volatile boolean running = true;
-        DatagramSocket socket;
+        DatagramSocket socket_send;
+        DatagramSocket socket_receive;
 
         @Override
         public void run() {
-            int port = 12345;
-            byte[] buffer = new byte[1024];
+            int receive_port = 12345;
+            int sender_port = 12346; 
+            byte[] receive_buffer = new byte[1024];
 
             try {
-                socket = new DatagramSocket(port);
-                System.out.println("Listening on port : " + port);
+                socket_receive = new DatagramSocket(receive_port);
+                System.out.println("Listening on port : " + receive_port);
 
                 while(running){ 
-                    DatagramPacket packet = new DatagramPacket(buffer, buffer.length);
-                    socket.receive(packet);
+                    DatagramPacket packet = new DatagramPacket(receive_buffer, receive_buffer.length);
+                    socket_receive.receive(packet);
 
                     // From doc : String(byte[] bytes, int offset, int length)
                     String message = new String(packet.getData(), 0, packet.getLength());
 
                     //System.out.println("Received from " + packet.getAddress() + " -> " + message);
                     if (message.contains("ONLINE BROADCAST")) {
-                        AddUserToContactList(message);
+                        String username = message.split(":")[2];
+                        String keyString = message.split(":")[1];
+                        if (contactList.isNicknameValid(username)) {
+                            AddUserToContactList(message);
+                        } else {
+                            // Send invalid username response 
+                            socket_send = new DatagramSocket();
+                            socket_send.setBroadcast(true);
+                            InetAddress address = InetAddress.getByName("10.1.255.255");  // Change to sender's adr later
+                            String invalid_name_msg = "INVALID_NICKNAME:" + keyString + ":" + username;
+                            byte[] send_buffer = invalid_name_msg.getBytes();
+                            DatagramPacket send_packet = new DatagramPacket(
+                                    send_buffer,
+                                    send_buffer.length,
+                                    address,
+                                    sender_port);
+                            socket_send.send(send_packet);
+                            System.out.println("Send invalid name message: " + invalid_name_msg);
+                            Thread.sleep(1000);
+                        }
                     } else if (message.contains("BYE")) {
                         contactList.removeUser(UUID.fromString(message.split(":")[1]));;
                     }
@@ -52,8 +74,11 @@ public class Listener {
             interrupt(); // wake up from Thread.sleep()
             try {
                 join(2000);
-                if (socket != null && !socket.isClosed()) {
-                    socket.close();
+                if (socket_send != null && !socket_send.isClosed()) {
+                    socket_send.close();
+                }
+                if (socket_receive != null && !socket_receive.isClosed()) {
+                    socket_receive.close();
                 }
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();

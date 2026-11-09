@@ -20,7 +20,9 @@ public class App {
             initialUsers.add(new Contact("400"));
             initialUsers.add(new Contact("500")); */
             
-            Contact myself = new Contact("MYSELF");
+            String myNickname = contactList.nicknameInput();
+            
+            Contact myself = new Contact(myNickname);
 
             /*ContactList initialUsers = ContactList.getInstance(); // contains initial users. If you connect in another device on the network you won't be in that list
             initialUsers.addOrUpdateContactTestVersion(new Contact("100"));
@@ -41,7 +43,7 @@ public class App {
             contacts.start(myself);
 
             System.out.println("CALLING STOP");
-            Thread.sleep(5000); // wait 5s
+            Thread.sleep(60000); // wait 5s
             
             contacts.stop(myself);
 
