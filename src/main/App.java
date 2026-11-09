@@ -40,6 +40,7 @@ public class App {
             System.out.println("CALLING STOP");
             Thread.sleep(5000); // wait 5s
             
+            // Starting to stop all threads
             for (int i=0; i<=initialUsers.size()-1;i++) {
                 contacts.stop(initialUsers.get(i));
             }

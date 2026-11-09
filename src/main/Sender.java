@@ -36,7 +36,7 @@ public class Sender {
                             address,
                             PORT);
                     socket.send(packet);
-                    System.out.println("Broadcasting: " + message);
+                    //System.out.println("Broadcasting: " + message);
                     Thread.sleep(1000);
                 }
             } catch (InterruptedException e) {
