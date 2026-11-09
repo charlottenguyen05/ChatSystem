@@ -1,4 +1,3 @@
-import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
@@ -109,12 +108,6 @@ public class Listener {
             System.out.println("Username received : " + username); // delete after
             contactList.addOrUpdateContact(new Contact(username, key)); // ContactList method to add or update inside a list
         }
-
-        public void isBroadcastOK() {
-            //String byeMessage = "BYE:" + myself.getUUID() + ":" + myself.getNickname();
-
-        }
-
     }
 
 

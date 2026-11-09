@@ -1,7 +1,5 @@
 // A Contact represents one discovered user on the network.
 package contact;
-
-import java.util.Scanner;
 import java.util.UUID;
 import java.net.InetAddress;
 import java.net.UnknownHostException;

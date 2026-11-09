@@ -33,3 +33,7 @@ java -cp target/classes App
 Commit144553f : Users are local. After this commit, users will be found with the network
 
 TODO : Remake the stop method in ContactDiscovery to shutdown the right contact 
+
+We have to remote repositories : 
+  - origin for us 
+  - eval for the shared repository
